@@ -11,6 +11,7 @@ public class Book {
 //    private boolean setIssued;
     private Map<String, List<String>> issuedList;
     private boolean b;
+    private boolean isIssued;
 
 
     public Book() {
@@ -65,10 +66,14 @@ public class Book {
     }
 
     public boolean isIssued() {
-        return true;
+        return isIssued;
     }
 
     public void setIssued(boolean b) {
         this.b = b;
+    }
+
+    public String toString(){
+        return title + " by "+ author + (isIssued ? ("Issued") : (" Available"));
     }
 }

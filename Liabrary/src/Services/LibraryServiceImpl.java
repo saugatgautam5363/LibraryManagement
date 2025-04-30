@@ -25,20 +25,26 @@ public class LibraryServiceImpl implements LibrayServices {
 
     @Override
     public void deleteBook(String bookName) {
-        Book bookToRemove = null;
-        for (Book book : books) {
-            if (book.getTitle().equals(bookName)) {
-                bookToRemove = book;
-                break;
-            }
-        }
-        if (bookToRemove != null) {
-            books.remove(bookToRemove);
-            System.out.println("Book removed: " + bookName);
-        } else {
-            System.out.println("Book not found: " + bookName);
-        }
+
     }
+
+
+//    @Override
+//    public void deleteBook(String bookName) {
+//        Book bookToRemove = null;
+//        for (Book book : books) {
+//            if (book.getTitle().equals(bookName)) {
+//                bookToRemove = book;
+//                break;
+//            }
+//        }
+//        if (bookToRemove != null) {
+//            books.remove(bookToRemove);
+//            System.out.println("Book removed: " + bookName);
+//        } else {
+//            System.out.println("Book not found: " + bookName);
+//        }
+//    }
 
 
     @Override
@@ -79,7 +85,7 @@ public class LibraryServiceImpl implements LibrayServices {
     }
 
     @Override
-    public void returnBook(String bookName, Users user) {
+    public boolean returnBook(String bookName, Users user) {
             for (Book book : books) {
                 if (book.getTitle().equalsIgnoreCase(bookName)) {
                     if (book.isIssued()) {
@@ -88,18 +94,19 @@ public class LibraryServiceImpl implements LibrayServices {
                     } else {
                         System.out.println("Book '" + bookName + "' was not issued.");
                     }
-                    return;
+                    return false;
                 }
             }
             System.out.println("Book '" + bookName + "' not found in the library.");
 
+        return false;
     }
 
     @Override
     public void displayAllBooks() {
         System.out.println("Books List: ");
         for (Book book : books) {
-            System.out.println("Book Name: "+book.getTitle() + " By " + book.getAuthor() + " Book Id: " + book.getBookId() + "Quantity of Books " + book.getQuantity());
+            System.out.println(book.toString());
         }
     }
 
@@ -119,4 +126,23 @@ public class LibraryServiceImpl implements LibrayServices {
         }
     }
 
+    @Override
+    public List<Book> deleteBooks(String bookName) {
+        boolean found = false;
+
+        for (int i = 0; i < books.size(); i++) {
+            if (books.get(i).getTitle().equalsIgnoreCase(bookName)) {
+                Book removedBook = books.remove(i);
+                System.out.println("Removed book: " + removedBook);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            System.out.println("Book not found!");
+        }
+
+        return books;
+    }
 }

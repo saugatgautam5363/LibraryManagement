@@ -18,11 +18,12 @@ public interface LibrayServices {
 
     public void issueBook(String bookName, Users user);
 
-    public void returnBook(String bookName, Users user);
+    public boolean returnBook(String bookName, Users user);
 
     public void displayAllBooks();
 
     public void displayIssuedBook();
 
 
+    List<Book> deleteBooks(String booksName);
 }
