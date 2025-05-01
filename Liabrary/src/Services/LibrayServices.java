@@ -16,13 +16,14 @@ public interface LibrayServices {
 
     public List<Book> fetchAllBooks();
 
-    public void issueBook(String bookName, Users user);
+    public boolean issueBook(String bookName, Users user,String email);
 
     public boolean returnBook(String bookName, Users user);
 
     public void displayAllBooks();
 
     public void displayIssuedBook();
+//    public void UsersEmail();
 
 
     List<Book> deleteBooks(String booksName);

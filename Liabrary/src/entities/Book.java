@@ -73,7 +73,8 @@ public class Book {
         this.b = b;
     }
 
-    public String toString(){
-        return title + " by "+ author + (isIssued ? ("Issued") : (" Available"));
+    public String toString() {
+        return title + " by " + author + (isIssued ? " Issued" : " Available");
     }
+
 }

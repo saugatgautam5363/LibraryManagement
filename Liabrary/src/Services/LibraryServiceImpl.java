@@ -64,7 +64,7 @@ public class LibraryServiceImpl implements LibrayServices {
     }
 
     @Override
-    public void issueBook(String bookName, Users user) {
+    public boolean issueBook(String bookName, Users user, String email) {
         Book newBook = null;
         for (Book book : books) {
             if (book.getTitle().equals(bookName)) {
@@ -72,33 +72,57 @@ public class LibraryServiceImpl implements LibrayServices {
                 break;
             }
         }
+
         if (newBook == null) {
             System.out.println("Book not found: " + bookName);
+            return false;
         } else {
-            Map<String, List<String>> issuedList = new HashMap<>();
-            List<String> issuedToUser = new ArrayList<>();
-            issuedToUser.add(user.getUsername());
-            issuedList.put(newBook.getTitle(), issuedToUser);
+            Map<String, List<String>> issuedList = newBook.getIssuedList();
+            if (issuedList == null) {
+                issuedList = new HashMap<>();
+            }
+
+            List<String> issuedToUsers = issuedList.getOrDefault(bookName, new ArrayList<>());
+
+            if (issuedToUsers.contains(user.getUsername())) {
+                System.out.println("User already issued this book.");
+                return false;
+            }
+
+            issuedToUsers.add(user.getUsername());
+//            issuedToUsers.add(user.getEmail());
+            issuedList.put(bookName, issuedToUsers);
             newBook.setIssuedList(issuedList);
-            System.out.println("Book Issued: " + newBook.getTitle() + " to user: " + user.getUsername());
+
+            System.out.println("Book Issued: " + newBook.getTitle() + " to user: " + user.getUsername() + " User Email: "+user.getEmail());
+            return true;
         }
     }
 
+
     @Override
     public boolean returnBook(String bookName, Users user) {
-            for (Book book : books) {
-                if (book.getTitle().equalsIgnoreCase(bookName)) {
-                    if (book.isIssued()) {
-                        book.setIssued(false);
-                        System.out.println("Book '" + bookName + "' has been successfully returned.");
-                    } else {
-                        System.out.println("Book '" + bookName + "' was not issued.");
-                    }
-                    return false;
-                }
-            }
-            System.out.println("Book '" + bookName + "' not found in the library.");
+        for (Book book : books) {
+            if (book.getTitle().equals(bookName)) {
+                Map<String, List<String>> issuedList = book.getIssuedList();
+                if (issuedList != null && issuedList.containsKey(bookName)) {
+                    List<String> issuedUsers = issuedList.get(bookName);
+                    if (issuedUsers.contains(user.getUsername())) {
+                        issuedUsers.remove(user.getUsername());
 
+                        if (issuedUsers.isEmpty()) {
+                            issuedList.remove(bookName);
+                        } else {
+                            issuedList.put(bookName, issuedUsers);
+                        }
+
+                        book.setIssuedList(issuedList);
+                        return true;
+                    }
+                }
+                break;
+            }
+        }
         return false;
     }
 
@@ -112,17 +136,24 @@ public class LibraryServiceImpl implements LibrayServices {
 
     @Override
     public void displayIssuedBook() {
-        System.out.println("Issued books list: ");
+        boolean anyIssued = false;
+        System.out.println("Issued books list:");
+
         for (Book book : books) {
             Map<String, List<String>> issuedList = book.getIssuedList();
             if (issuedList != null && !issuedList.isEmpty()) {
-                System.out.println("issued books list:- ");
+                anyIssued = true;
                 for (Map.Entry<String, List<String>> entry : issuedList.entrySet()) {
                     String bookName = entry.getKey();
                     List<String> issueDetails = entry.getValue();
-                    System.out.println(bookName + " : " + issueDetails);
+                    List<String> emailsUsers = entry.getValue();
+                    System.out.println("Books Name:-" + bookName + " UserName:-" + issueDetails + "User Email:-"+ emailsUsers);
                 }
             }
+        }
+
+        if (!anyIssued) {
+            System.out.println("No books have been issued.");
         }
     }
 
