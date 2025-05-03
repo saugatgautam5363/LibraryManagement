@@ -26,5 +26,5 @@ public interface LibrayServices {
 //    public void UsersEmail();
 
 
-    List<Book> deleteBooks(String booksName);
+    List<Book> deleteBooks(String booksName,int booksId);
 }

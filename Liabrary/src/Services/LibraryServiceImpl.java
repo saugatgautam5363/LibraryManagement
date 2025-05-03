@@ -158,7 +158,7 @@ public class LibraryServiceImpl implements LibrayServices {
     }
 
     @Override
-    public List<Book> deleteBooks(String bookName) {
+    public List<Book> deleteBooks(String bookName,int booksId) {
         boolean found = false;
 
         for (int i = 0; i < books.size(); i++) {
@@ -172,8 +172,11 @@ public class LibraryServiceImpl implements LibrayServices {
 
         if (!found) {
             System.out.println("Book not found!");
+        }else {
+            System.out.println("Books is Found!!");
         }
 
         return books;
     }
+
 }

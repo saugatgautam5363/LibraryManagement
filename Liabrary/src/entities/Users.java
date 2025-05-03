@@ -3,7 +3,7 @@ package entities;
 
 public class Users {
     private String username;
-    private String email;
+    private  String email;
 
     public Users(String username, String email) {
         this.username = username;

@@ -1,5 +1,5 @@
-
 package entities;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,15 +8,10 @@ public class Book {
     private String author;
     private int bookId;
     private int quantity;
-//    private boolean setIssued;
     private Map<String, List<String>> issuedList;
-    private boolean b;
     private boolean isIssued;
 
-
-    public Book() {
-
-    }
+    public Book() {}
 
     public Book(String title, String author, int bookId, int quantity) {
         this.title = title;
@@ -24,6 +19,7 @@ public class Book {
         this.bookId = bookId;
         this.quantity = quantity;
     }
+
 
     public Map<String, List<String>> getIssuedList() {
         return issuedList;
@@ -69,12 +65,21 @@ public class Book {
         return isIssued;
     }
 
-    public void setIssued(boolean b) {
-        this.b = b;
+    public void setIssued(boolean issued) {
+        isIssued = issued;
     }
 
+    @Override
     public String toString() {
-        return title + " by " + author + (isIssued ? " Issued" : " Available");
+        return title + " by " + author + (isIssued ? " (Issued)" : " (Available)");
     }
 
+    public String toFileString() {
+        return bookId + "," + title + "," + author + "," + quantity;
+    }
+
+    public static Book fromFileString(String line) {
+        String[] parts = line.trim().split("\\s*,\\s*");
+        return new Book(parts[1], parts[2], Integer.parseInt(parts[0]), Integer.parseInt(parts[3]));
+    }
 }

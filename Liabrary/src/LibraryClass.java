@@ -1,3 +1,4 @@
+import Services.BooksManagement;
 import Services.LibrayServices;
 import Services.LibraryServiceImpl;
 import entities.Book;
@@ -56,6 +57,7 @@ public class LibraryClass {
 
                         Book book = new Book(title, author, bookId, quantity);
                         newLibrary.addBook(book);
+                        BooksManagement.saveBook(book);
                         System.out.println("Books added successfully!!\n");
                         break;
 
@@ -63,6 +65,8 @@ public class LibraryClass {
                         try {
                             System.out.print("Enter bookName to update: ");
                             String bookNameToUpdate = scanner.nextLine();
+                            System.out.println("Enter Update BooksId: ");
+                            int booksId = scanner.nextInt();
 
                             Book updatedBook = newLibrary.getBook(bookNameToUpdate);
 
@@ -74,6 +78,7 @@ public class LibraryClass {
                             System.out.print("Enter new book name: ");
                             String newBookName = scanner.nextLine();
                             updatedBook.setTitle(newBookName);
+                            BooksManagement.updateBookById(booksId, Book.fromFileString(bookNameToUpdate));
                             System.out.println("Book title updated successfully.");
                             break;
                         } catch (NullPointerException e) {
@@ -131,8 +136,11 @@ public class LibraryClass {
                     case 7:
                         System.out.print("Enter book name to delete: ");
                         String bookToDelete = scanner.nextLine();
-                        newLibrary.deleteBooks(bookToDelete);
+                        System.out.println("Enter the Books Id: ");
+                        int booksId = scanner.nextInt();
+                        newLibrary.deleteBooks(bookToDelete,booksId);
                         System.out.println("Book deleted successfully.");
+                        BooksManagement.deleteBookById(booksId);
                         break;
 
                     case 8:
