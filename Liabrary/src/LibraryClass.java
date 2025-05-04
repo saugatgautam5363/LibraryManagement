@@ -27,7 +27,6 @@ public class LibraryClass {
         while (quit) {
             try {
                 System.out.println("""
-                        ===    Enter your choice:
                         ===    1. Add a new book.
                         ===    2. Update book.
                         ===    3. Display All Books.
@@ -37,6 +36,7 @@ public class LibraryClass {
                         ===    7. Delete a book.
                         ===    8. Exit the program.
                         """);
+                System.out.println("Enter the Your choices: ");
                 int choice = scanner.nextInt();
                 scanner.nextLine();
                 switch (choice) {
@@ -95,14 +95,12 @@ public class LibraryClass {
                         System.out.print("Enter user's name: ");
                         String userName = scanner.nextLine();
 
-                        System.out.print("Enter user's email: ");
-                        String email = scanner.nextLine();
 
-                        Users newUser = new Users(userName, email);
-                        boolean issued = newLibrary.issueBook(bookName, newUser, email);
+                        Users newUser = new Users(userName);
+                        boolean issued = newLibrary.issueBook(bookName, newUser);
 
                         if (issued) {
-                            System.out.println("Book issued successfully to " + userName + " (" + email + ")");
+                            System.out.println("Book issued successfully to " + userName );
                         } else {
                             System.out.println("Book not found or already issued.");
                         }
@@ -119,10 +117,8 @@ public class LibraryClass {
                         System.out.print("Enter the user name: \n");
                         String returnUsername = scanner.nextLine();
 
-                        System.out.println("Enter user email: ");
-                        String returnUserEmail = scanner.nextLine();
 
-                        Users returnUser = new Users(returnUsername, returnUserEmail);
+                        Users returnUser = new Users(returnUsername);
 
                         if (newLibrary.returnBook(booksName, returnUser)) {
                             System.out.println("Book returned successfully.");

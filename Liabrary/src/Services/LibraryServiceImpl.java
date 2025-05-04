@@ -3,10 +3,10 @@ package Services;
 import entities.Book;
 import entities.Users;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.io.*;
+import java.util.*;
+
 
 public class LibraryServiceImpl implements LibrayServices {
 
@@ -58,7 +58,7 @@ public class LibraryServiceImpl implements LibrayServices {
     }
 
     @Override
-    public boolean issueBook(String bookName, Users user, String email) {
+    public boolean issueBook(String bookName, Users user) {
         Book newBook = null;
         for (Book book : books) {
             if (book.getTitle().equals(bookName)) {
@@ -67,10 +67,17 @@ public class LibraryServiceImpl implements LibrayServices {
             }
         }
 
+
         if (newBook == null) {
             System.out.println("Book not found: " + bookName);
             return false;
+        }
+
+        if (newBook.getQuantity() == 0) {
+            System.out.println("Book is out of Stock!");
+            return false;
         } else {
+
             Map<String, List<String>> issuedList = newBook.getIssuedList();
             if (issuedList == null) {
                 issuedList = new HashMap<>();
@@ -84,11 +91,11 @@ public class LibraryServiceImpl implements LibrayServices {
             }
 
             issuedToUsers.add(user.getUsername());
-//            issuedToUsers.add(user.getEmail());
             issuedList.put(bookName, issuedToUsers);
             newBook.setIssuedList(issuedList);
+            newBook.setQuantity(newBook.getQuantity() - 1);
 
-            System.out.println("Book Issued: " + newBook.getTitle() + " to user: " + user.getUsername() + " User Email: " + user.getEmail());
+            System.out.println("Book Issued: " + newBook.getTitle() + " to user: " + user.getUsername());
             return true;
         }
     }
@@ -110,6 +117,7 @@ public class LibraryServiceImpl implements LibrayServices {
                             issuedList.put(bookName, issuedUsers);
                         }
 
+                        book.setQuantity(book.getQuantity() + 1);
                         book.setIssuedList(issuedList);
                         return true;
                     }
@@ -123,9 +131,21 @@ public class LibraryServiceImpl implements LibrayServices {
     @Override
     public void displayAllBooks() {
         System.out.println("Books List: ");
-        for (Book book : books) {
-            System.out.println("BookId: " + book.getBookId() + " Title: " + book.getTitle() + " Quantity: " + book.getQuantity() + " Author: " + book.getAuthor());
+        try {
+            FileReader fileReader = new FileReader("src/booksdata.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while (line != null) {
+                System.out.println(line);
+                line = bufferedReader.readLine();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+//        for (Book book : books) {
+//            System.out.println("BookId: " + book.getBookId() + " Title: " + book.getTitle() + " Quantity: " + book.getQuantity() + " Author: " + book.getAuthor());
+//        }
     }
 
     public void displayIssuedBook() {
@@ -139,8 +159,7 @@ public class LibraryServiceImpl implements LibrayServices {
                 for (Map.Entry<String, List<String>> entry : issuedList.entrySet()) {
                     String bookName = entry.getKey();
                     List<String> issueDetails = entry.getValue();
-                    List<String> emailsUsers = entry.getValue();
-                    System.out.println("Books Name:-" + bookName + " UserName:-" + issueDetails + "User Email:-" + emailsUsers);
+                    System.out.println("Books Name:-" + bookName + " UserName:-" + issueDetails);
                 }
             }
         }

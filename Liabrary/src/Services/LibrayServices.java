@@ -16,7 +16,7 @@ public interface LibrayServices {
 
     public List<Book> fetchAllBooks();
 
-    public boolean issueBook(String bookName, Users user,String email);
+    public boolean issueBook(String bookName, Users user);
 
     public boolean returnBook(String bookName, Users user);
 

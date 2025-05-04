@@ -10,7 +10,10 @@ public class BooksManagement {
 
     public static void saveBook(Book book) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
-            bw.write(book.toFileString());
+            bw.write("BookId: " + book.getBookId() +
+                    ", Title: " + book.getTitle() +
+                    ", Author: " + book.getAuthor() +
+                    ", Quantity: " + book.getQuantity() + "\n");
             bw.newLine();
         } catch (IOException e) {
             System.out.println("Error saving book: " + e.getMessage());
@@ -61,10 +64,10 @@ public class BooksManagement {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME))) {
             for (Book book : books) {
                 if (book.getBookId() == bookId) {
-                    bw.write(updatedBook.toFileString()); // write updated data
+                    bw.write(updatedBook.toFileString());
                     found = true;
                 } else {
-                    bw.write(book.toFileString()); // keep old data
+                    bw.write(book.toFileString());
                 }
                 bw.newLine();
             }
