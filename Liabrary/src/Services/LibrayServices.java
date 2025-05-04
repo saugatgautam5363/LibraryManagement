@@ -27,4 +27,6 @@ public interface LibrayServices {
 
 
     List<Book> deleteBooks(String booksName,int booksId);
+
+    List<Book> deleteBooks(String bookName);
 }

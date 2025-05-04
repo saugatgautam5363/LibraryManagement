@@ -1,15 +1,16 @@
 import Services.BooksManagement;
 import Services.LibrayServices;
 import Services.LibraryServiceImpl;
+import Services.LibrayServices;
 import entities.Book;
 import entities.Users;
+
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class LibraryClass {
     public static void main(String[] args) {
-
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("""
@@ -22,10 +23,11 @@ public class LibraryClass {
 
         boolean quit = true;
         LibrayServices newLibrary = new LibraryServiceImpl();
-
+        ;
         while (quit) {
             try {
                 System.out.println("""
+                        ===    Enter your choice:
                         ===    1. Add a new book.
                         ===    2. Update book.
                         ===    3. Display All Books.
@@ -35,23 +37,22 @@ public class LibraryClass {
                         ===    7. Delete a book.
                         ===    8. Exit the program.
                         """);
-                System.out.print("Enter your Choices: ");
                 int choice = scanner.nextInt();
                 scanner.nextLine();
-
                 switch (choice) {
                     case 1:
-                        System.out.print("Enter bookId: ");
+                        System.out.println("Enter bookId: ");
                         int bookId = scanner.nextInt();
+
                         scanner.nextLine();
 
-                        System.out.print("Enter book name: ");
+                        System.out.println("Enter book name: ");
                         String title = scanner.nextLine();
 
-                        System.out.print("Enter author: ");
+                        System.out.println("Enter author: ");
                         String author = scanner.nextLine();
 
-                        System.out.print("Enter quantity of the book: ");
+                        System.out.println("Enter quantity of the book: ");
                         int quantity = scanner.nextInt();
                         scanner.nextLine();
 
@@ -65,8 +66,6 @@ public class LibraryClass {
                         try {
                             System.out.print("Enter bookName to update: ");
                             String bookNameToUpdate = scanner.nextLine();
-                            System.out.println("Enter Update BooksId: ");
-                            int booksId = scanner.nextInt();
 
                             Book updatedBook = newLibrary.getBook(bookNameToUpdate);
 
@@ -78,7 +77,6 @@ public class LibraryClass {
                             System.out.print("Enter new book name: ");
                             String newBookName = scanner.nextLine();
                             updatedBook.setTitle(newBookName);
-                            BooksManagement.updateBookById(booksId, Book.fromFileString(bookNameToUpdate));
                             System.out.println("Book title updated successfully.");
                             break;
                         } catch (NullPointerException e) {
@@ -101,7 +99,7 @@ public class LibraryClass {
                         String email = scanner.nextLine();
 
                         Users newUser = new Users(userName, email);
-                        boolean issued = newLibrary.issueBook(bookName, newUser,email);
+                        boolean issued = newLibrary.issueBook(bookName, newUser, email);
 
                         if (issued) {
                             System.out.println("Book issued successfully to " + userName + " (" + email + ")");
@@ -151,7 +149,6 @@ public class LibraryClass {
                         System.out.println("Invalid choice. Try again.");
                         break;
                 }
-
             } catch (InputMismatchException e) {
                 System.out.println("Enter a number from 1 to 8 — not a string!");
                 scanner.nextLine();
