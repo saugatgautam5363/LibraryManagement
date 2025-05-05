@@ -23,10 +23,11 @@ public interface LibrayServices {
     public void displayAllBooks();
 
     public void displayIssuedBook();
-//    public void UsersEmail();
 
 
     List<Book> deleteBooks(String booksName,int booksId);
+
+    boolean searchBook(String bookName, int booksId);
 
     List<Book> deleteBooks(String bookName);
 }
