@@ -19,6 +19,11 @@ public class LibraryServiceImpl implements LibrayServices {
 
     @Override
     public Book updateBook(int index, Book book) {
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter("books.tst"))){
+
+        }catch (IOException e){
+
+        }
         books.set(index, book);
         return book;
     }
@@ -172,6 +177,31 @@ public class LibraryServiceImpl implements LibrayServices {
     @Override
     public List<Book> deleteBooks(String booksName, int booksId) {
         return List.of();
+    }
+
+//    @Override
+//    public List<Book> deleteBooks(String booksName, int booksId) {
+//        boolean found = false;
+//        for(int i =0;i<books.size();i++){
+//            if(books.){
+//                System.out.println(i);
+//            }
+//        }
+//        return List.of();
+//    }
+
+    @Override
+    public boolean searchBook(String bookName, int booksId) {
+        boolean found = false;
+        for(Book book : books){
+            if(book.getTitle().equalsIgnoreCase(bookName) && book.getBookId() == booksId){
+                book.displayBooks();
+            }
+        }
+        if(!found){
+            System.out.println("Book name and books Id is not found!!");
+        }
+        return true;
     }
 
     @Override
