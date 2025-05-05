@@ -57,7 +57,7 @@ public class BooksManagement {
         }
     }
 
-    public static void updateBookById(int bookId, Book updatedBook) {
+    public static boolean updateBookById(int bookId, Book updatedBook) {
         List<Book> books = readBooks();
         boolean found = false;
 
@@ -80,5 +80,6 @@ public class BooksManagement {
         } else {
             System.out.println("Book ID not found.");
         }
+        return found;
     }
 }
