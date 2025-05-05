@@ -74,12 +74,27 @@ public class Book {
         return title + " by " + author + (isIssued ? " (Issued)" : " (Available)");
     }
 
-    public String toFileString() {
-        return bookId + "," + title + "," + author + "," + quantity;
+    public static Book fromFileString(String line) {
+        try {
+            String[] parts = line.split(", ");
+            int bookId = Integer.parseInt(parts[0].split(": ")[1].trim());
+            String title = parts[1].split(": ")[1].trim();
+            String author = parts[2].split(": ")[1].trim();
+            int quantity = Integer.parseInt(parts[3].split(": ")[1].trim());
+
+            return new Book(title, author, bookId, quantity);
+        } catch (Exception e) {
+            System.out.println("Error parsing book from line: " + line);
+            return null;
+        }
     }
 
-    public static Book fromFileString(String line) {
-        String[] parts = line.trim().split("\\s*,\\s*");
-        return new Book(parts[1], parts[2], Integer.parseInt(parts[0]), Integer.parseInt(parts[3]));
+    public String toFileString() {
+        return "BookId: " + bookId +
+                ", Title: " + title +
+                ", Author: " + author +
+                ", Quantity: " + quantity;
     }
+
+
 }
