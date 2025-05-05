@@ -95,6 +95,12 @@ public class Book {
                 ", Author: " + author +
                 ", Quantity: " + quantity;
     }
+    public void displayBooks(){
+        System.out.println("Book Id: "+getBookId());
+        System.out.println("Book Name: "+getTitle());
+        System.out.println("Book Author: "+getAuthor());
+        System.out.println("Book quantity: "+getQuantity());
+    }
 
 
 }
