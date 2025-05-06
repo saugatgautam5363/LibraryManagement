@@ -11,7 +11,7 @@ import java.util.*;
 public class LibraryServiceImpl implements LibrayServices {
 
     List<Book> books = new ArrayList<>();
-
+    Scanner scanner = new Scanner(System.in);
     @Override
     public void addBook(Book book) {
         books.add(book);
@@ -134,7 +134,7 @@ public class LibraryServiceImpl implements LibrayServices {
     }
 
     @Override
-    public void displayAllBooks() {
+    public String displayAllBooks() {
         System.out.println("Books List: ");
         try {
             FileReader fileReader = new FileReader("books.txt");
@@ -151,6 +151,7 @@ public class LibraryServiceImpl implements LibrayServices {
 //        for (Book book : books) {
 //            System.out.println("BookId: " + book.getBookId() + " Title: " + book.getTitle() + " Quantity: " + book.getQuantity() + " Author: " + book.getAuthor());
 //        }
+        return null;
     }
 
     public void displayIssuedBook() {
