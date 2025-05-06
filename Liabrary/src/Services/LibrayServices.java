@@ -20,7 +20,7 @@ public interface LibrayServices {
 
     public boolean returnBook(String bookName, Users user);
 
-    public void displayAllBooks();
+    public String displayAllBooks();
 
     public void displayIssuedBook();
 
