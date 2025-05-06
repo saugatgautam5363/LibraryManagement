@@ -1,16 +1,15 @@
-import Services.BooksManagement;
-import Services.LibrayServices;
-import Services.LibraryServiceImpl;
+import Services.*;
 import entities.Book;
 import entities.Users;
 
+import java.sql.SQLOutput;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class LibraryClass {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
+        LogImplementImp logger = new LogImplementImp();
         System.out.println("""
                 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 |                                                                                                    |
@@ -21,7 +20,8 @@ public class LibraryClass {
 
         boolean quit = true;
         LibrayServices newLibrary = new LibraryServiceImpl();
-
+        System.out.println("Enter the Library Staff Name: ");
+        String StaffName = scanner.nextLine();
         while (quit) {
             try {
                 System.out.println("""
@@ -57,6 +57,7 @@ public class LibraryClass {
 
                         Book book = new Book(title, author, bookId, quantity);
                         newLibrary.addBook(book);
+                        logger.AddLog(StaffName,book.getTitle());
                         BooksManagement.saveBook(book);
                         System.out.println("Book added successfully!\n");
                         break;
@@ -79,7 +80,7 @@ public class LibraryClass {
                             System.out.print("Enter new book name: ");
                             String newBookName = scanner.nextLine();
                             updatedBook.setTitle(newBookName);
-
+                            logger.updateLog(bookNameToUpdate,newBookName,booksId);
                             BooksManagement.updateBookById(booksId, updatedBook);
                             System.out.println("Book title updated successfully.");
                         } catch (Exception e) {
@@ -89,6 +90,7 @@ public class LibraryClass {
 
                     case 3:
                         newLibrary.displayAllBooks();
+                        logger.DisplayAllBookLog(newLibrary.displayAllBooks());
                         break;
 
                     case 4:
@@ -96,13 +98,14 @@ public class LibraryClass {
                         String bookName = scanner.nextLine();
 
                         System.out.print("Enter user's name: ");
-                        String userName = scanner.nextLine();
+                        String userNames = scanner.nextLine();
 
-                        Users newUser = new Users(userName);
+                        Users newUser = new Users(StaffName);
                         boolean issued = newLibrary.issueBook(bookName, newUser);
+                        logger.issueLog(bookName,userNames,StaffName);
 
                         if (issued) {
-                            System.out.println("Book issued successfully to " + userName);
+                            System.out.println("Book issued successfully to " + StaffName);
                         } else {
                             System.out.println("Book not found or already issued.");
                         }
@@ -120,7 +123,7 @@ public class LibraryClass {
                         String returnUsername = scanner.nextLine();
 
                         Users returnUser = new Users(returnUsername);
-
+                        logger.returnLog(returnUsername,booksName);
                         if (newLibrary.returnBook(booksName, returnUser)) {
                             System.out.println("Book returned successfully.");
                         } else {
@@ -133,8 +136,8 @@ public class LibraryClass {
                         String bookToDelete = scanner.nextLine();
                         System.out.print("Enter the Book ID: ");
                         int deleteId = scanner.nextInt();
-                        scanner.nextLine(); // consume newline
-
+                        scanner.nextLine();
+                        logger.deleteLog(bookToDelete,deleteId);
                         newLibrary.deleteBooks(bookToDelete, deleteId);
                         BooksManagement.deleteBookById(deleteId);
                         System.out.println("Book deleted successfully.");
@@ -157,7 +160,7 @@ public class LibraryClass {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Enter a number from 1 to 8 — not a string!");
-                scanner.nextLine(); // clear invalid input
+                scanner.nextLine();
             }
         }
     }
