@@ -2,7 +2,6 @@ import Services.*;
 import entities.Book;
 import entities.Users;
 
-import java.sql.SQLOutput;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -32,7 +31,7 @@ public class LibraryClass {
                         ===    5. Show all issued books.
                         ===    6. Return book.
                         ===    7. Delete a book.
-                        ===    8. Search a Books
+                        ===    8. Search a Books.
                         ===    9. Exit the program.
                         """);
                 System.out.print("Enter your choice: ");
@@ -90,7 +89,7 @@ public class LibraryClass {
 
                     case 3:
                         newLibrary.displayAllBooks();
-                        logger.DisplayAllBookLog(newLibrary.displayAllBooks());
+                        logger.DisplayAllBookLog(StaffName);
                         break;
 
                     case 4:
@@ -123,12 +122,12 @@ public class LibraryClass {
                         String returnUsername = scanner.nextLine();
 
                         Users returnUser = new Users(returnUsername);
-                        logger.returnLog(returnUsername,booksName);
                         if (newLibrary.returnBook(booksName, returnUser)) {
                             System.out.println("Book returned successfully.");
                         } else {
                             System.out.println("Book was not issued!");
                         }
+                        logger.returnLog(returnUsername,booksName);
                         break;
 
                     case 7:
@@ -137,7 +136,7 @@ public class LibraryClass {
                         System.out.print("Enter the Book ID: ");
                         int deleteId = scanner.nextInt();
                         scanner.nextLine();
-                        logger.deleteLog(bookToDelete,deleteId);
+                        logger.deleteLog(bookToDelete);
                         newLibrary.deleteBooks(bookToDelete, deleteId);
                         BooksManagement.deleteBookById(deleteId);
                         System.out.println("Book deleted successfully.");
