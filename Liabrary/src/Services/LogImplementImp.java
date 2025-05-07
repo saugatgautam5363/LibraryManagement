@@ -7,15 +7,30 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LogImplementImp implements Logimplement {
+    List<Book> books = new ArrayList<>() ;
     @Override
     public void deleteLog(String bookName) {
-        LocalDateTime date = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd HH:mm:ss");
-        String timestamp = date.format(formatter);
-        String datalog = new String("Delete book Name "+bookName.toUpperCase()+" at "+timestamp);
-        files.WriteLog(datalog);
+        boolean remove = false;
+        for(int i =0;i< books.size();i++){
+            if(books.get(i).getTitle().equalsIgnoreCase(bookName)){
+                books.remove(i);
+                remove = true;
+                break;
+            }
+        }
+        if(!remove) {
+            LocalDateTime date = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String timestamp = date.format(formatter);
+            String datalog = new String("Delete book Name " + bookName.toUpperCase() + " at " + timestamp);
+            files.WriteLog(datalog);
+        }else {
+            System.out.println("Book is not found!!");
+        }
     }
 
     FileHandlingServices files = new FileHandlingServices();
