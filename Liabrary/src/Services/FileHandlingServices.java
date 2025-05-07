@@ -11,7 +11,7 @@ public class FileHandlingServices {
             System.out.println("Message: "+e.getMessage());
         }
     }
-    public void ReadLog(){
+    public void ReadLog(String timestamp){
         BufferedReader br = null;
         try{
             br = new BufferedReader(new FileReader("log.data"));
