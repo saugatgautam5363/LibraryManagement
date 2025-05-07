@@ -138,7 +138,7 @@ public class LibraryClass {
                         scanner.nextLine();
                         logger.deleteLog(bookToDelete);
                         newLibrary.deleteBooks(bookToDelete, deleteId);
-                        BooksManagement.deleteBookById(deleteId);
+//                        BooksManagement.deleteBookById(deleteId);
                         System.out.println("Book deleted successfully.");
                         break;
 
