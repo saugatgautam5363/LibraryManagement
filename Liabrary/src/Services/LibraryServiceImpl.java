@@ -137,7 +137,7 @@ public class LibraryServiceImpl implements LibrayServices {
     public String displayAllBooks() {
         System.out.println("Books List: ");
         try {
-            FileReader fileReader = new FileReader("books.txt");
+            FileReader fileReader = new FileReader("log.data");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line = bufferedReader.readLine();
             while (line != null) {
