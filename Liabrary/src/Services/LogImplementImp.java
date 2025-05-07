@@ -1,5 +1,7 @@
 package Services;
 
+import entities.Book;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,26 +10,12 @@ import java.time.format.DateTimeFormatter;
 
 public class LogImplementImp implements Logimplement {
     @Override
-    public void deleteLog(String bookName,int bookId) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("log.data"))) {
-            String line;
-            boolean found = false;
-
-            while ((line = reader.readLine()) != null) {
-                if (line.toLowerCase().contains("deleted")) {
-                    System.out.println(line);
-                    found = true;
-                }
-            }
-
-            if (!found) {
-                System.out.println("No deleted book logs found.");
-            }
-
-        } catch (IOException e) {
-            System.out.println("Message: " + e.getMessage());
-        }
-
+    public void deleteLog(String bookName) {
+        LocalDateTime date = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd HH:mm:ss");
+        String timestamp = date.format(formatter);
+        String datalog = new String("Delete book Name "+bookName.toUpperCase()+" at "+timestamp);
+        files.WriteLog(datalog);
     }
 
     FileHandlingServices files = new FileHandlingServices();
@@ -59,11 +47,11 @@ files.WriteLog(logData);
     }
 
     @Override
-    public void DisplayAllBookLog(String booksName) {
+    public void DisplayAllBookLog(String username) {
         LocalDateTime date = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String timestamp = date.format(formatter);
-        String logdata = new String("Library books are:-"+booksName+" at "+timestamp);
+        String logdata = username + " viewed all books" + " at " + timestamp;
         files.WriteLog(logdata);
     }
 
