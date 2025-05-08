@@ -8,9 +8,9 @@ import java.util.List;
 public interface LibrayServices {
     public void addBook(Book book);
 
-    public Book updateBook(int index, Book book);
+    boolean updateBookById(int id, Book newBook);
 
-    public void deleteBook(String bookName);
+    public void deleteBook(String bookName,int BookId);
 
     public Book getBook(String bookName);
 
