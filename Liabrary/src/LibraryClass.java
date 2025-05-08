@@ -151,7 +151,7 @@ public class LibraryClass {
                         newLibrary.searchBook(searchBookName,searchBookId);
                         break;
                     case 9:
-                        System.out.println("Show all details of the library system: \n");
+                        System.out.println("Show all details of the library system: ");
                         logger.showLog();
                         break;
                     case 10:
