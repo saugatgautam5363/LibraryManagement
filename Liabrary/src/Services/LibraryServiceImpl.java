@@ -197,6 +197,7 @@ public class LibraryServiceImpl implements LibrayServices {
         for(Book book : books){
             if(book.getTitle().equalsIgnoreCase(bookName) && book.getBookId() == booksId){
                 book.displayBooks();
+                found = true;
             }
         }
         if(!found){
