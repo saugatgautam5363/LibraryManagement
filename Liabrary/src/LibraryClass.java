@@ -64,27 +64,32 @@ public class LibraryClass {
 
                     case 2:
                         try {
-                            System.out.print("Enter book name to update: ");
-                            String bookNameToUpdate = scanner.nextLine();
-
-                            System.out.print("Enter the Book ID: ");
+                            System.out.print("Enter the Book ID to update: ");
                             int booksId = scanner.nextInt();
                             scanner.nextLine();
 
-                            Book updatedBook = newLibrary.getBook(bookNameToUpdate);
-                            if (updatedBook == null) {
-                                System.out.println("This book is not found.");
-                                break;
-                            }
+                            System.out.print("Enter new book title: ");
+                            String newTitle = scanner.nextLine();
 
-                            System.out.print("Enter new book name: ");
-                            String newBookName = scanner.nextLine();
-                            updatedBook.setTitle(newBookName);
-                            logger.updateLog(bookNameToUpdate,newBookName,booksId);
-                            BooksManagement.updateBookById(booksId, updatedBook);
-                            System.out.println("Book title updated successfully.");
+                            System.out.print("Enter new author name: ");
+                            String newAuthor = scanner.nextLine();
+
+                            System.out.print("Enter new quantity: ");
+                            int newQuantity = scanner.nextInt();
+                            scanner.nextLine();
+
+                            Book updatedBook = new Book(newTitle, newAuthor, booksId, newQuantity);
+
+                            boolean isUpdated = BooksManagement.updateBookById(booksId, updatedBook);
+
+                            if (isUpdated) {
+                                logger.updateLog("OldData", newTitle, booksId);
+                                System.out.println("Book updated successfully.");
+                            } else {
+                                System.out.println("Book with ID " + booksId + " not found.");
+                            }
                         } catch (Exception e) {
-                            System.out.println("Error updating the book.");
+                            System.out.println("Error updating the book: " + e.getMessage());
                         }
                         break;
 
@@ -138,7 +143,7 @@ public class LibraryClass {
                         int deleteId = scanner.nextInt();
                         scanner.nextLine();
                         logger.deleteLog(bookToDelete);
-                        newLibrary.deleteBooks(bookToDelete, deleteId);
+                        newLibrary.deleteBook(bookToDelete, deleteId);
 //                        BooksManagement.deleteBookById(deleteId);
                         System.out.println("Book deleted successfully.");
                         break;
