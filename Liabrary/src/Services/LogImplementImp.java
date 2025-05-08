@@ -105,7 +105,6 @@ files.WriteLog(logData);
             String line;
             while ((line = br.readLine()) != null){
                 System.out.println(line);
-                br.close();
             }
         }catch (IOException e){
             System.out.println("Message: "+e.getMessage());
