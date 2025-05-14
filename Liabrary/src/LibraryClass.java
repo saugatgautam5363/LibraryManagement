@@ -1,3 +1,4 @@
+import DataBase.BookInsertDB;
 import Services.*;
 import entities.Book;
 import entities.Users;
@@ -59,6 +60,7 @@ public class LibraryClass {
                         newLibrary.addBook(book);
                         logger.AddLog(StaffName,book.getTitle());
                         BooksManagement.saveBook(book);
+                        BookInsertDB.Insert(bookId,title,author,quantity);
                         System.out.println("Book added successfully!\n");
                         break;
 
