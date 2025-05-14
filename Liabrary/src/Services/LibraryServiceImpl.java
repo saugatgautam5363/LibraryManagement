@@ -69,7 +69,6 @@ public class LibraryServiceImpl implements LibrayServices {
             System.out.println("Book not found in memory: " + bookName);
         }
 
-        // Step 2: Read file and filter out the target book
         List<Book> updatedBooks = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader("books.txt"))) {
@@ -83,7 +82,6 @@ public class LibraryServiceImpl implements LibrayServices {
                         String author = parts[2].split(":")[1].trim();
                         int quantity = Integer.parseInt(parts[3].split(":")[1].trim());
 
-                        // If this is not the book to be deleted, keep it
                         if (!(title.equalsIgnoreCase(bookName) && id == bookId)) {
                             updatedBooks.add(new Book(title, author, id, quantity));
                         }
@@ -97,7 +95,6 @@ public class LibraryServiceImpl implements LibrayServices {
             return;
         }
 
-        // Step 3: Write back the remaining books to the file
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("books.txt"))) {
             for (Book book : updatedBooks) {
                 bw.write(book.getBookId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getQuantity());
