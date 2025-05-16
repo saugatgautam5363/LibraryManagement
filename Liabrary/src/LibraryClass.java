@@ -1,4 +1,4 @@
-import DataBase.BookInsertDB;
+import DataBase.*;
 import Services.*;
 import entities.Book;
 import entities.Users;
@@ -56,7 +56,7 @@ public class LibraryClass {
                         int quantity = scanner.nextInt();
                         scanner.nextLine();
 
-                        Book book = new Book(title, author, bookId, quantity);
+                        Book book = new Book(title, author,bookId,quantity);
                         newLibrary.addBook(book);
                         logger.AddLog(StaffName,book.getTitle());
                         BooksManagement.saveBook(book);
@@ -86,6 +86,7 @@ public class LibraryClass {
 
                             if (isUpdated) {
                                 logger.updateLog("OldData", newTitle, booksId);
+                                Update.updateBooks(booksId,newTitle,newAuthor,newQuantity);
                                 System.out.println("Book updated successfully.");
                             } else {
                                 System.out.println("Book with ID " + booksId + " not found.");
@@ -101,41 +102,61 @@ public class LibraryClass {
                         break;
 
                     case 4:
+                        scanner.nextLine(); // Consume newline left from previous input
+
                         System.out.print("Enter book name to issue: ");
                         String bookName = scanner.nextLine();
 
-                        System.out.print("Enter user's name: ");
-                        String userNames = scanner.nextLine();
+                        System.out.print("Enter the book Id: ");
+                        int issuedBookId = scanner.nextInt();
+                        scanner.nextLine(); // Consume leftover newline
 
-                        Users newUser = new Users(StaffName);
-                        boolean issued = newLibrary.issueBook(bookName, newUser);
-                        logger.issueLog(bookName,userNames,StaffName);
+                        System.out.print("Enter user's name: ");
+                        String userName = scanner.nextLine();
+
+                        System.out.print("Enter your (staff) name: ");
+                        String staffName = scanner.nextLine();
+
+                        Users newUser = new Users(staffName);
+
+                        boolean issued = newLibrary.issueBook(issuedBookId, newUser);
 
                         if (issued) {
-                            System.out.println("Book issued successfully to " + StaffName);
+                            logger.issueLog(bookName, userName, staffName);
+
+                            IssuedBook.Issued_books(issuedBookId, userName,bookName);
+
+                            System.out.println("✅ Book issued successfully to " + userName + " by " + staffName);
                         } else {
-                            System.out.println("Book not found or already issued.");
+                            System.out.println("❌ Book not found or already issued.");
                         }
                         break;
 
+
                     case 5:
                         newLibrary.displayIssuedBook();
+                        ShowissuedBooks.showIssudeBooks();
                         break;
 
                     case 6:
                         System.out.print("Enter the return Book name: ");
                         String booksName = scanner.nextLine();
 
+                        System.out.print("Enter the book id: ");
+                        int bookId1 = scanner.nextInt();
+                        scanner.nextLine(); // Consume the leftover newline
+
                         System.out.print("Enter the user name: ");
                         String returnUsername = scanner.nextLine();
 
                         Users returnUser = new Users(returnUsername);
-                        if (newLibrary.returnBook(booksName, returnUser)) {
+                        if (newLibrary.returnBook(bookId1, returnUser)) {
+                            Return.returnBook(bookId1);
+                            logger.returnLog(returnUsername, booksName);
                             System.out.println("Book returned successfully.");
                         } else {
                             System.out.println("Book was not issued!");
                         }
-                        logger.returnLog(returnUsername,booksName);
                         break;
 
                     case 7:
@@ -145,7 +166,8 @@ public class LibraryClass {
                         int deleteId = scanner.nextInt();
                         scanner.nextLine();
                         logger.deleteLog(bookToDelete);
-                        newLibrary.deleteBook(bookToDelete, deleteId);
+                        newLibrary.deleteBooks(bookToDelete, deleteId);
+                        Delete.delete(deleteId);
 //                        BooksManagement.deleteBookById(deleteId);
                         System.out.println("Book deleted successfully.");
                         break;
