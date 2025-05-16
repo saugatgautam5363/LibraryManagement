@@ -10,15 +10,15 @@ public interface LibrayServices {
 
     boolean updateBookById(int id, Book newBook);
 
-    public void deleteBook(String bookName,int BookId);
+//    public void deleteBook(String bookName,int BookId);
 
     public Book getBook(String bookName);
 
     public List<Book> fetchAllBooks();
 
-    public boolean issueBook(String bookName, Users user);
+    public boolean issueBook(int bookId, Users user);
 
-    public boolean returnBook(String bookName, Users user);
+    public boolean returnBook(int bookId, Users user);
 
     public String displayAllBooks();
 
