@@ -6,13 +6,12 @@ import java.sql.SQLException;
 
 public class BookInsertDB {
 
-    public static void Insert(int id, String bookName, String author, int quantity) {
-        String query = "INSERT INTO books(id, title, author, quantity) VALUES (?, ?, ?, ?)";
+    public static void Insert(int id,String bookName, String author, int quantity) {
+        String query = "INSERT INTO books(id,title, author, quantity) VALUES (?, ?, ?,?)";
 
         try (Connection connection = DBConnection.getconnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-                preparedStatement.setInt(1, id);
+                preparedStatement.setInt(1,id);
                 preparedStatement.setString(2, bookName);
                 preparedStatement.setString(3, author);
                 preparedStatement.setInt(4, quantity);
