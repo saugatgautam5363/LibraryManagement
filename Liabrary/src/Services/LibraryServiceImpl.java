@@ -51,61 +51,61 @@ public class LibraryServiceImpl implements LibrayServices {
         return updated;
     }
 
-    @Override
-    public void deleteBook(String bookName, int bookId) {
-        // Step 1: Remove from memory
-        Book bookToRemove = null;
-        for (Book book : books) {
-            if (book.getTitle().equalsIgnoreCase(bookName) && book.getBookId() == bookId) {
-                bookToRemove = book;
-                break;
-            }
-        }
-
-        if (bookToRemove != null) {
-            books.remove(bookToRemove);
-            System.out.println("Book removed from memory: " + bookName);
-        } else {
-            System.out.println("Book not found in memory: " + bookName);
-        }
-
-        List<Book> updatedBooks = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader("books.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 4) {
-                    try {
-                        int id = Integer.parseInt(parts[0].split(":")[1].trim());
-                        String title = parts[1].split(":")[1].trim();
-                        String author = parts[2].split(":")[1].trim();
-                        int quantity = Integer.parseInt(parts[3].split(":")[1].trim());
-
-                        if (!(title.equalsIgnoreCase(bookName) && id == bookId)) {
-                            updatedBooks.add(new Book(title, author, id, quantity));
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Skipping invalid line: " + line);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
-            return;
-        }
-
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("books.txt"))) {
-            for (Book book : updatedBooks) {
-                bw.write(book.getBookId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getQuantity());
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Error writing to file: " + e.getMessage());
-        }
-
-        System.out.println("Book successfully deleted from file (if existed): " + bookName);
-    }
+//    @Override
+//    public void deleteBook(String bookName, int bookId) {
+//        // Step 1: Remove from memory
+//        Book bookToRemove = null;
+//        for (Book book : books) {
+//            if (book.getTitle().equalsIgnoreCase(bookName) && book.getBookId() == bookId) {
+//                bookToRemove = book;
+//                break;
+//            }
+//        }
+//
+//        if (bookToRemove != null) {
+//            books.remove(bookToRemove);
+//            System.out.println("Book removed from memory: " + bookName);
+//        } else {
+//            System.out.println("Book not found in memory: " + bookName);
+//        }
+//
+//        List<Book> updatedBooks = new ArrayList<>();
+//
+//        try (BufferedReader br = new BufferedReader(new FileReader("books.txt"))) {
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                String[] parts = line.split(",");
+//                if (parts.length == 4) {
+//                    try {
+//                        int id = Integer.parseInt(parts[0].split(":")[1].trim());
+//                        String title = parts[1].split(":")[1].trim();
+//                        String author = parts[2].split(":")[1].trim();
+//                        int quantity = Integer.parseInt(parts[3].split(":")[1].trim());
+//
+//                        if (!(title.equalsIgnoreCase(bookName) && id == bookId)) {
+//                            updatedBooks.add(new Book(title, author, id, quantity));
+//                        }
+//                    } catch (NumberFormatException e) {
+//                        System.out.println("Skipping invalid line: " + line);
+//                    }
+//                }
+//            }
+//        } catch (IOException e) {
+//            System.out.println("Error reading file: " + e.getMessage());
+//            return;
+//        }
+//
+//        try (BufferedWriter bw = new BufferedWriter(new FileWriter("books.txt"))) {
+//            for (Book book : updatedBooks) {
+//                bw.write(book.getBookId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getQuantity());
+//                bw.newLine();
+//            }
+//        } catch (IOException e) {
+//            System.out.println("Error writing to file: " + e.getMessage());
+//        }
+//
+//        System.out.println("Book successfully deleted from file (if existed): " + bookName);
+//    }
 
     @Override
     public Book getBook(String bookName) {
@@ -124,32 +124,30 @@ public class LibraryServiceImpl implements LibrayServices {
     }
 
     @Override
-    public boolean issueBook(String bookName, Users user) {
+    public boolean issueBook(int bookId, Users user) {
         Book newBook = null;
         for (Book book : books) {
-            if (book.getTitle().equals(bookName)) {
+            if (book != null && book.getBookId() == bookId) {
                 newBook = book;
                 break;
             }
         }
 
-
         if (newBook == null) {
-            System.out.println("Book not found: " + bookName);
+            System.out.println("Book not found with ID: " + bookId);
             return false;
         }
 
         if (newBook.getQuantity() == 0) {
-            System.out.println("Book is out of Stock!");
+            System.out.println("Book is out of stock!");
             return false;
         } else {
-
             Map<String, List<String>> issuedList = newBook.getIssuedList();
             if (issuedList == null) {
                 issuedList = new HashMap<>();
             }
 
-            List<String> issuedToUsers = issuedList.getOrDefault(bookName, new ArrayList<>());
+            List<String> issuedToUsers = issuedList.getOrDefault(bookId, new ArrayList<>());
 
             if (issuedToUsers.contains(user.getUsername())) {
                 System.out.println("User already issued this book.");
@@ -157,34 +155,32 @@ public class LibraryServiceImpl implements LibrayServices {
             }
 
             issuedToUsers.add(user.getUsername());
-            issuedList.put(bookName, issuedToUsers);
+            issuedList.put(String.valueOf(bookId), issuedToUsers);
             newBook.setIssuedList(issuedList);
             newBook.setQuantity(newBook.getQuantity() - 1);
 
-            System.out.println("Book Issued: " + newBook.getTitle() + " to user: " + user.getUsername());
+            System.out.println("Book Issued: " + newBook.getTitle() + " (ID: " + bookId + ") to user: " + user.getUsername());
             return true;
         }
     }
-
-
     @Override
-    public boolean returnBook(String bookName, Users user) {
+    public boolean returnBook(int bookId, Users user) {
         for (Book book : books) {
-            if (book.getTitle().equals(bookName)) {
+            if (book.getBookId() == bookId) {
                 Map<String, List<String>> issuedList = book.getIssuedList();
-                if (issuedList != null && issuedList.containsKey(bookName)) {
-                    List<String> issuedUsers = issuedList.get(bookName);
+                String bookIdStr = String.valueOf(bookId);
+
+                if (issuedList != null && issuedList.containsKey(bookIdStr)) {
+                    List<String> issuedUsers = issuedList.get(bookIdStr);
+
                     if (issuedUsers.contains(user.getUsername())) {
                         issuedUsers.remove(user.getUsername());
 
                         if (issuedUsers.isEmpty()) {
-                            issuedList.remove(bookName);
-                        } else {
-                            issuedList.put(bookName, issuedUsers);
+                            issuedList.remove(bookIdStr);
                         }
 
                         book.setQuantity(book.getQuantity() + 1);
-                        book.setIssuedList(issuedList);
                         return true;
                     }
                 }
@@ -240,6 +236,11 @@ public class LibraryServiceImpl implements LibrayServices {
     public List<Book> deleteBooks(String booksName, int booksId) {
         return List.of();
     }
+
+//    @Override
+//    public List<Book> deleteBooks(String booksName, int booksId) {
+//        return List.of();
+//    }
 
 //    @Override
 //    public List<Book> deleteBooks(String booksName, int booksId) {
