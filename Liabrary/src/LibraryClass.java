@@ -97,8 +97,9 @@ public class LibraryClass {
                         break;
 
                     case 3:
-                        newLibrary.displayAllBooks();
-                        logger.DisplayAllBookLog(StaffName);
+//                        newLibrary.displayAllBooks();
+//                        logger.DisplayAllBookLog(StaffName);
+                        DisplayAllBooks.displayBooks();
                         break;
 
                     case 4:
