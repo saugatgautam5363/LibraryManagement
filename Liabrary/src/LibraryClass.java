@@ -179,6 +179,7 @@ public class LibraryClass {
                         System.out.print("Enter the Book Id to Search: ");
                         int searchBookId = scanner.nextInt();
                         newLibrary.searchBook(searchBookName,searchBookId);
+                        SearchBooks.searchBooks(searchBookName);
                         break;
                     case 9:
                         System.out.println("Show all details of the library system: ");
