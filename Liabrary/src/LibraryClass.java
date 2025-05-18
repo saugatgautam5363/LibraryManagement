@@ -103,36 +103,34 @@ public class LibraryClass {
                         break;
 
                     case 4:
-                        scanner.nextLine(); // Consume newline left from previous input
-
-                        System.out.print("Enter book name to issue: ");
-                        String bookName = scanner.nextLine();
-
-                        System.out.print("Enter the book Id: ");
+                        System.out.print("Enter book ID to issue: ");
                         int issuedBookId = scanner.nextInt();
-                        scanner.nextLine(); // Consume leftover newline
+                        scanner.nextLine(); // Consume newline
 
-                        System.out.print("Enter user's name: ");
+                        System.out.print("Enter book name: ");
+                        String bookNameToIssue = scanner.nextLine();
+
+                        System.out.print("Enter user name (who is borrowing the book): ");
                         String userName = scanner.nextLine();
 
                         System.out.print("Enter your (staff) name: ");
-                        String staffName = scanner.nextLine();
+                        String staffName2 = scanner.nextLine();
 
-                        Users newUser = new Users(staffName);
+                        Users userToIssue = new Users(userName);
 
-                        boolean issued = newLibrary.issueBook(issuedBookId, newUser);
+                        // Issue book in memory
+                        boolean issued = newLibrary.issueBook(issuedBookId, userToIssue);
 
                         if (issued) {
-                            logger.issueLog(bookName, userName, staffName);
+                            // Log + DB insert
+                            logger.issueLog(bookNameToIssue, userName, staffName2);
+                            IssuedBook.Issued_books(issuedBookId, userName, bookNameToIssue);
 
-                            IssuedBook.Issued_books(issuedBookId, userName,bookName);
-
-                            System.out.println("✅ Book issued successfully to " + userName + " by " + staffName);
+                            System.out.println("✅ Book issued successfully to " + userName + " by " + staffName2);
                         } else {
-                            System.out.println("❌ Book not found or already issued.");
+                            System.out.println("❌ Book not found, out of stock, or already issued to this user.");
                         }
                         break;
-
 
                     case 5:
                         newLibrary.displayIssuedBook();
