@@ -91,6 +91,7 @@ public class LibraryClass {
                             } else {
                                 System.out.println("Book with ID " + booksId + " not found.");
                             }
+
                         } catch (Exception e) {
                             System.out.println("Error updating the book: " + e.getMessage());
                         }
